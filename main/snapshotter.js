@@ -3,7 +3,7 @@ const rp = require('request-promise');
 const k8s = require('./k8s-util.js');
 
 const PVC_LABEL = process.env.PVC_LABEL; // only snapshot PVCs where volumeBackup = PVC_LABEL -- default: all non-empty
-const K8SAPI = process.env.K8SAPI;
+const K8SAPI = process.env.K8SAPI || 'http://127.0.0.1:8001';
 const DEBUG = !!process.env.DEBUG;
 
 

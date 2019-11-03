@@ -5,7 +5,7 @@ const Hanoi = require('./hanoi.js');
 const Roundrobin = require('./roundrobin.js');
 
 const PVC_LABEL = process.env.PVC_LABEL; // only snapshot PVCs where volumeBackup = PVC_LABEL -- default: all non-empty
-const K8SAPI = process.env.K8SAPI;
+const K8SAPI = process.env.K8SAPI || 'http://127.0.0.1:8001';
 const NUM_BACKUP_SETS = process.env.NUM_BACKUP_SETS || 5;
 const BACKUP_SET_STRATEGY = process.env.BACKUP_SET_STRATEGY || 'hanoi';
 const SECRET_S3CFG = process.env.SECRET_S3CFG || "volume-backup-s3cfg";

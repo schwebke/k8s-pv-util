@@ -1,0 +1,41 @@
+# service account, cluster role and cluster role binding
+#
+# granting r/w access to
+#    - PersistentVolumeClaims
+#    - Pods
+#    - VolumeSnapshots
+#    - Jobs
+#
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-pv-util-sa
+  namespace: default
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8s-pv-util-role
+rules:
+- apiGroups: [""] # "" indicates the core API group
+  resources: ["persistentvolumeclaims", "pods", "pods/log"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["snapshot.storage.k8s.io"]
+  resources: ["volumesnapshots"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+- apiGroups: ["batch"]
+  resources: ["jobs"]
+  verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: do-k8s-pv-utils
+subjects:
+- kind: ServiceAccount
+  name: k8s-pv-util-sa
+  namespace: default
+roleRef:
+  kind: ClusterRole
+  name: k8s-pv-util-role
+  apiGroup: rbac.authorization.k8s.io

@@ -1,0 +1,37 @@
+#!/bin/bash
+cp /config/s3cfg /root/.s3cfg
+cd /volume
+
+export TAROPTS="--preserve-permissions --same-owner --numeric-owner"
+
+# count top level directory entries, excluding lost+found
+NUM_ENTRIES=$(find . -mindepth 1 -maxdepth 1 |grep -v "^./lost+found" |wc -l)
+
+# checks to avoid restore over existing data
+if [ "$NUM_ENTRIES" = "0" ]; then
+   # empty dir, put a marker in case we need to retry the restore after partially filling it from the backup
+   echo "empty directory, proceeding with restore"
+   touch ./.volume-backup-in-progress
+else
+   if [ -f ./.volume-backup-in-progress ]; then
+      echo "volume is not empty, but restore tag file ./.volume-backup-in-progress found -- proceeding with restore"
+   else
+      # just note that we do not try to restore -- if used as an init container this will happen after restore
+      echo "volume is not empty, doing nothing"
+      exit 0
+   fi
+fi
+
+echo "do restore"
+if
+   s3cmd --no-progress get $S3URL - \
+      | gunzip \
+      | tar -xf- $TAROPTS
+then
+   echo "restore done"
+   rm ./.volume-backup-in-progress
+   exit 0
+else
+   echo "restore command failed"
+   exit 1
+fi

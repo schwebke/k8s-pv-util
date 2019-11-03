@@ -1,0 +1,8 @@
+#!/bin/bash
+cp /config/s3cfg /root/.s3cfg
+
+export TAROPTS="--one-file-system"
+
+(cd /snapshot; tar --create --file - --exclude "lost+found" $TAROPTS .) \
+   | gzip \
+   | s3cmd put - $S3URL

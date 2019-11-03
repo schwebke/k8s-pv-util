@@ -1,0 +1,16 @@
+{
+  "name": "volume-backup",
+  "version": "1.0.0",
+  "description": "k8s backup PVCs to S3 objects -- create snapshot PVC",
+  "author": "Kai G. Schwebke <kai@schwebke.com>",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "request": "^2.88.0",
+    "request-promise": "^4.2.1",
+    "uuid": "^3.3.3",
+    "log-timestamp": "^0.3.0"
+  }
+}

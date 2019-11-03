@@ -4,6 +4,11 @@ Utilities to backup, restore or initialize kubernetes persistent volumes.
 ----
 
 ## k8s-pv-util
+
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/schwebke/k8s-pv-util)](https://hub.docker.com/r/schwebke/k8s-pv-util)
+
+[`docker pull schwebke/k8s-pv-util`](https://hub.docker.com/r/schwebke/k8s-pv-util)
+
  - create *VolumeSnapshots* from tagged *PersistentVolumes*
  - archive *VolumeSnapshots* to s3 compatible object stores using *k8s-pv-s3-uploader*
 
@@ -26,9 +31,11 @@ is provided in [./kubernetes/k8s-pv-util-sa.yaml](https://github.com/schwebke/k8
 This container supports different main operation modes:
 
  - In `snapshot` mode, intended to be used in `CronJobs`, *VolumeSnapshots* are created from *PersistentVolumeClaims*.
+   This is done once, then the container exits.
 
  - In `controller` mode, intended to be used in a `Deployment`, *VolumeSnapshots* are claimed, archived to a s3 compatible
-object store using a backup strategy to keep only a certain amount of history and finally cleaned up.
+   object store using a backup strategy to keep only a certain amount of history and finally cleaned up.
+   This is done cyclic in a control loop, the container stays active until terminated.
 
 
 #### Snapshot Mode
@@ -53,6 +60,7 @@ can be specified -- then only *PersistentVolumes* with an exact match for the la
 | `MODE`                   | `controller`                         | yes                      |                         |
 | `K8SAPI`                 | URL of k8s API proxy                 | no                       | `http://127.0.0.1:8001` |
 | `PVC_LABEL`              | `volumeBackup` label value           | no                       | *all non-empty values*  |
+| `CHECK_INTERVAL`         | check/reconcile interval in seconds  | no                       | 120                     |
 | `DEBUG`                  | verborse logging                     | no                       | false                   |
 | `NUM_BACKUP_SETS`        | max. number of backups in archive    | no                       | 5                       |
 | `BACKUP_SET_STRATEGY`    | `hanoi` or `roundrobin`              | no                       | `hanoi`                 |
@@ -70,6 +78,7 @@ The default backup rotation scheme is
 [Tower of Hanoi](https://en.wikipedia.org/wiki/Backup_rotation_scheme#Tower_of_Hanoi).
 With 5 backup sets this results in a histroy dating back up to 32 cycles, with growing intervals.
 With the `roundrobin` scheme every cycle is retained until the max. number of sets is reached.
+The cycle number is generated from an attribute created and maintained in the originating *PersistentVolumeClaim*.
 
 The volume data is archived using `tar` with `gzip` compression to the object store.
 The kubernetes namespace and name of the originating volume is appended to the s3 base URL resulting
@@ -79,6 +88,11 @@ for a base path `s3://my-object-store/my-base-path-component`.
 ----
 
 ## k8s-pv-s3-uploader
+
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/schwebke/k8s-pv-s3-uploader)](https://hub.docker.com/r/schwebke/k8s-pv-s3-uploader)
+
+[`docker pull schwebke/k8s-pv-s3-uploader`](https://hub.docker.com/r/schwebke/k8s-pv-s3-uploader)
+
  - archive and upload a *PersistentVolume* to a s3 compatible object store
 
 Uploads volume data to the given s3 object store url and exits after completion.
@@ -108,6 +122,11 @@ to the object store.
 ----
 
 ## k8s-pv-s3-restorer
+
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/schwebke/k8s-pv-s3-restorer)](https://hub.docker.com/r/schwebke/k8s-pv-s3-restorer)
+
+[`docker pull schwebke/k8s-pv-s3-restorer`](https://hub.docker.com/r/schwebke/k8s-pv-s3-restorer)
+
  - initialize a *PersistentVolume* using an archive from a s3 compatible object store
 
 Download volume data from the given s3 object store URL as `.tar.gz` archive,

@@ -18,7 +18,7 @@ module.exports = class Snapshotter {
 
    createSnapshots() {
       console.log('query for PVCs ...');
-      rp(K8SAPI+'/api/v1/persistentvolumeclaims')
+      return rp(K8SAPI+'/api/v1/persistentvolumeclaims')
       .then((res) => {
 	 console.log('OK');
 	 DEBUG && console.log('result: '+res);

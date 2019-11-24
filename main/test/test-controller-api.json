@@ -1,0 +1,64 @@
+{
+   "pvcs": {
+      "items": [
+	 {
+	     "metadata": {
+		 "name": "app-accounts-pvc",
+		 "namespace": "app",
+		 "selfLink": "/api/v1/namespaces/app/persistentvolumeclaims/app-accounts-pvc",
+		 "uid": "c48458f0-9ed6-49af-8c88-801e84e900cb",
+		 "resourceVersion": "4226435",
+		 "creationTimestamp": "2019-11-24T04:23:09Z",
+		 "labels": {
+		     "volumeBackup": "true"
+		 },
+		 "annotations": {
+		 }
+	     },
+	     "spec": {
+		 "resources": {
+		     "requests": {
+			 "storage": "2Gi"
+		     }
+		 }
+	     },
+	     "status": {
+		 "capacity": {
+		     "storage": "2Gi"
+		 }
+	     }
+	 }
+      ]
+   },
+   "vss": {
+      "items": [
+	 {
+	    "apiVersion": "snapshot.storage.k8s.io/v1alpha1",
+	    "kind": "VolumeSnapshot",
+	    "metadata": {
+	       "name": "volumebackup-129337a1-a27c-4cff-a47e-713656b493d6",
+	       "namespace": "app",
+	       "labels": {
+		  "volumeBackup": "true"
+	       },
+	       "annotations": {
+		  "volumeBackup": "{\"resources\":{\"requests\":{\"storage\":\"2Gi\"}},\"volumeName\":\"app/app-accounts-pvc\",\"sequence\":1}"
+	       }
+	    },
+	    "spec": {
+	       "source": {
+		  "name": "app-accounts-pvc",
+		  "kind": "PersistentVolumeClaim"
+	       }
+	    },
+	    "id": 1
+	 }
+      ]
+   },
+   "pvc": {},
+   "vs": { "present": 1 },
+   "jobs": {
+      "items": []
+   },
+   "job": {}
+}

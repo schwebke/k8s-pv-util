@@ -1,0 +1,34 @@
+{
+   "pvcs": {
+      "items": [
+	 {
+	     "metadata": {
+		 "name": "app-accounts-pvc",
+		 "namespace": "app",
+		 "selfLink": "/api/v1/namespaces/app/persistentvolumeclaims/app-accounts-pvc",
+		 "uid": "c48458f0-9ed6-49af-8c88-801e84e900cb",
+		 "resourceVersion": "4226435",
+		 "creationTimestamp": "2019-11-24T04:23:09Z",
+		 "labels": {
+		     "volumeBackup": "true"
+		 },
+		 "annotations": {
+		 }
+	     },
+	     "spec": {
+		 "resources": {
+		     "requests": {
+			 "storage": "2Gi"
+		     }
+		 }
+	     },
+	     "status": {
+		 "capacity": {
+		     "storage": "2Gi"
+		 }
+	     }
+	 }
+      ]
+   },
+   "vss": []
+}

@@ -9,10 +9,10 @@
     "test": "mocha test/test-snapshot-1.js && mocha test/test-snapshot-2.js && mocha test/test-snapshot-3.js && mocha test/test-snapshot-4.js && mocha test/test-controller-1.js"
   },
   "dependencies": {
+    "log-timestamp": "^0.3.0",
     "request": "^2.88.0",
-    "request-promise": "^4.2.1",
-    "uuid": "^3.3.3",
-    "log-timestamp": "^0.3.0"
+    "request-promise": "^4.2.5",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "json-server": "^0.15.1",

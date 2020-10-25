@@ -10,12 +10,12 @@
   },
   "dependencies": {
     "log-timestamp": "^0.3.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.5",
-    "uuid": "^3.3.3"
+    "request": "^2.88.2",
+    "request-promise": "^4.2.6",
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "json-server": "^0.15.1",
-    "mocha": "^6.2.2"
+    "mocha": "^6.2.3"
   }
 }

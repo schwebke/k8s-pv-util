@@ -17,6 +17,8 @@ module.exports = class Snapshotter {
    }
 
    async createSnapshots() {
+      await k8s.initApi();
+
       console.log('query for PVCs ...');
       let res = await rp(K8SAPI+'/api/v1/persistentvolumeclaims');
       console.log('OK');
@@ -43,9 +45,9 @@ module.exports = class Snapshotter {
 	 console.log('snapshotting PVC '+qname+' ...');
 	 snapshots.push(rp({
 	    method: 'POST',
-	    uri: K8SAPI+'/apis/snapshot.storage.k8s.io/v1alpha1/namespaces/'+pvc.metadata.namespace+'/volumesnapshots',
+	    uri: K8SAPI+'/apis/'+k8s.api.snapshot+'/namespaces/'+pvc.metadata.namespace+'/volumesnapshots',
 	    body: {
-	       apiVersion: 'snapshot.storage.k8s.io/v1alpha1',
+	       apiVersion: k8s.api.snapshot,
 	       kind: 'VolumeSnapshot',
 	       metadata: {
 		  name: 'volumebackup-'+uuid,

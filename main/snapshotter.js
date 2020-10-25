@@ -43,6 +43,15 @@ module.exports = class Snapshotter {
 	 let uuid = require('uuid/v4')(); // used to tag objects created from a run
 	 let sequence = JSON.parse((pvc.metadata.annotations.volumeBackupSequence || "0")) + 1;
 	 console.log('snapshotting PVC '+qname+' ...');
+	 let source = {
+	       persistentVolumeClaimName: pvc.metadata.name
+	    };
+	 if (k8s.api.snapshot.includes('v1alpha1')) {
+	    source = {
+		  name: pvc.metadata.name,
+		  kind: 'PersistentVolumeClaim'
+	       };
+	 }
 	 snapshots.push(rp({
 	    method: 'POST',
 	    uri: K8SAPI+'/apis/'+k8s.api.snapshot+'/namespaces/'+pvc.metadata.namespace+'/volumesnapshots',
@@ -64,10 +73,7 @@ module.exports = class Snapshotter {
 		  }
 	       },
 	       spec: {
-		  source: {
-		     name: pvc.metadata.name,
-		     kind: 'PersistentVolumeClaim'
-		  }
+		  source: source
 	       }
 	    },
 	    json: true

@@ -40,6 +40,8 @@ module.exports = class Controller {
    }
 
    async claimSnapshots() {
+      await k8s.initApi();
+
       DEBUG && console.log('');
       DEBUG && console.log('claim snapshots');
       DEBUG && console.log('query for existings PVCs / already claimed VS ...');
@@ -57,7 +59,7 @@ module.exports = class Controller {
       DEBUG && console.log('existing PVCs for snapshots: '+JSON.stringify(existingClaims));
       DEBUG && console.log('query for VolumeSnapshots ...');
 
-      res = await rp(K8SAPI+'/apis/snapshot.storage.k8s.io/v1alpha1/volumesnapshots');
+      res = await rp(K8SAPI+'/apis/'+k8s.api.snapshot+'/volumesnapshots');
       DEBUG && console.log('get VolumeSnapshots OK');
       DEBUG && console.log('result: '+res);
       o = JSON.parse(res);
@@ -234,6 +236,8 @@ module.exports = class Controller {
    }
 
    async cleanup() {
+      await k8s.initApi();
+
       DEBUG && console.log('');
       DEBUG && console.log('cleanup');
       // delete / cleanup for succeeded jobs in this order -- then no re-creation happens
@@ -243,7 +247,7 @@ module.exports = class Controller {
       let jobs = [];
 
       DEBUG && console.log('query for VolumeSnapshots ...');
-      let res = await rp(K8SAPI+'/apis/snapshot.storage.k8s.io/v1alpha1/volumesnapshots');
+      let res = await rp(K8SAPI+'/apis/'+k8s.api.snapshot+'/volumesnapshots');
       DEBUG && console.log('get VolumeSnapshots OK');
       DEBUG && console.log('result: '+res);
       let o = JSON.parse(res);

@@ -21,6 +21,11 @@ server.use(jsonServer.rewriter({
 // handle also application/merge-patch+json
 server.use(bodyParser.json({'type': '*/*'}));
 server.use((req, res, next) => {
+   console.log(req.method+' '+req.path);
+   if (req.path === '/apis/snapshot.storage.k8s.io' && req.method === 'GET') {
+      res.jsonp({ preferredVersion: { groupVersion: "snapshot.storage.k8s.io/v1alpha1" }});
+      return;
+   }
    if (req.path === '/pvc' && req.method === 'PATCH') {
       db.pvc = Object.assign(db.pvc, req.body);
    }
